@@ -121,8 +121,30 @@
             const opt = {
                 margin: 1,
                 filename: filename,
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    scrollY: -window.scrollY
+                },
+                jsPDF: { 
+                    unit: 'in', 
+                    format: 'letter', 
+                    orientation: 'portrait',
+                    compress: true
+                },
+                pagebreak: { 
+                    mode: ['avoid-all', 'css', 'legacy'],
+                    before: '.page-break-before',
+                    after: '.page-break-after',
+                    avoid: ['tr', 'td', 'li', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+                },
+                enableLinks: true,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    letterRendering: true
+                }
             };
             
             html2pdf().from(preview).set(opt).save()
