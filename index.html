@@ -89,6 +89,20 @@
     </div>
 
     <script>
+        function getFilenameFromMarkdown(markdownText) {
+            // Try to find the first heading
+            const headingMatch = markdownText.match(/^#\s+(.+)$/m);
+            if (headingMatch) {
+                // Convert title to filename-friendly format
+                return headingMatch[1]
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric chars with dash
+                    .replace(/^-+|-+$/g, '') // Remove leading/trailing dashes
+                    + '.pdf';
+            }
+            return 'document.pdf'; // Default filename
+        }
+
         function convertToPDF() {
             const markdownText = document.getElementById('markdown-input').value;
             const preview = document.getElementById('preview');
@@ -100,10 +114,13 @@
             // Temporarily show the preview
             preview.style.display = 'block';
             
+            // Get filename from markdown content
+            const filename = getFilenameFromMarkdown(markdownText);
+            
             // Convert to PDF and download
             const opt = {
                 margin: 1,
-                filename: 'converted-markdown.pdf',
+                filename: filename,
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
