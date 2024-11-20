@@ -3,156 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markdown to PDF Converter</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        body {
-            background-color: #f3f4f6;
-            min-height: 100vh;
-            padding: 1rem;
-            margin: 0;
-            font-family: system-ui, -apple-system, sans-serif;
-        }
-        .container {
-            max-width: 64rem;
-            margin: 0 auto;
-        }
-        h1 {
-            font-size: 1.875rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-        .input-container {
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-        }
-        textarea {
-            width: 100%;
-            height: 24rem;
-            padding: 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-        textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
-        }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-        button {
-            background-color: #3b82f6;
-            color: white;
-            font-weight: 600;
-            padding: 0.5rem 1.5rem;
-            border-radius: 0.5rem;
-            border: none;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        button:hover {
-            background-color: #2563eb;
-        }
-        #preview {
-            display: none;
-            background-color: white;
-            padding: 2rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-    </style>
+    <title>MD2PDF - Markdown to PDF Converter</title>
+    <meta name="description" content="Convert your Markdown to PDF instantly using our free online converter">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" target="_blank" rel="noopener noreferrer">
 </head>
 <body>
     <div class="container">
-        <h1>Markdown to PDF Converter</h1>
+        <header>
+            <h1>MD2PDF</h1>
+            <p class="subtitle">Convert your Markdown to PDF</p>
+        </header>
         
-        <div class="input-container">
-            <textarea 
-                id="markdown-input"
-                placeholder="Enter your Markdown text here..."></textarea>
-            
-            <div class="button-container">
-                <button onclick="convertToPDF()">
-                    Convert to PDF
-                </button>
+        <main>
+            <div class="editor-section">
+                <textarea id="markdown-input" placeholder="Type your Markdown here..."></textarea>
             </div>
             
-            <div id="preview"></div>
-        </div>
+            <div class="actions">
+                <button id="convert-btn">Convert to PDF</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>Using <a href="https://md-to-pdf.fly.dev" target="_blank" rel="noopener noreferrer">Fly.dev</a> for conversion</p>
+        </footer>
     </div>
-
-    <script>
-        function getFilenameFromMarkdown(markdownText) {
-            // Try to find the first heading
-            const headingMatch = markdownText.match(/^#\s+(.+)$/m);
-            if (headingMatch) {
-                // Convert title to filename-friendly format
-                return headingMatch[1]
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric chars with dash
-                    .replace(/^-+|-+$/g, '') // Remove leading/trailing dashes
-                    + '.pdf';
-            }
-            return 'document.pdf'; // Default filename
-        }
-
-        function convertToPDF() {
-            const markdownText = document.getElementById('markdown-input').value;
-            const preview = document.getElementById('preview');
-            
-            // Convert Markdown to HTML
-            const htmlContent = marked.parse(markdownText);
-            preview.innerHTML = htmlContent;
-            
-            // Temporarily show the preview
-            preview.style.display = 'block';
-            
-            // Get filename from markdown content
-            const filename = getFilenameFromMarkdown(markdownText);
-            
-            // Convert to PDF and download
-            const opt = {
-                margin: 1,
-                filename: filename,
-                html2canvas: { 
-                    scale: 2,
-                    useCORS: true,
-                    scrollY: -window.scrollY
-                },
-                jsPDF: { 
-                    unit: 'in', 
-                    format: 'letter', 
-                    orientation: 'portrait',
-                    compress: true
-                },
-                pagebreak: { 
-                    mode: ['avoid-all', 'css', 'legacy'],
-                    before: '.page-break-before',
-                    after: '.page-break-after',
-                    avoid: ['tr', 'td', 'li', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
-                },
-                enableLinks: true,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2,
-                    useCORS: true,
-                    letterRendering: true
-                }
-            };
-            
-            html2pdf().from(preview).set(opt).save()
-                .then(() => {
-                    // Hide the preview again after PDF generation
-                    preview.style.display = 'none';
-                });
-        }
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js" target="_blank" rel="noopener noreferrer"></script>
+    <script src="script.js"></script>
 </body>
 </html>
