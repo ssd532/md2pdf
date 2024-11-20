@@ -3,6 +3,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const convertBtn = document.getElementById('convert-btn');
     const apiUrl = 'https://md-to-pdf.fly.dev';
 
+    function getFilenameFromMarkdown(markdown) {
+        // Try to find the first heading (# Title)
+        const headingMatch = markdown.match(/^#\s+(.+)$/m);
+        if (headingMatch) {
+            // Replace invalid filename characters and trim
+            return headingMatch[1]
+                .replace(/[<>:"/\\|?*]/g, '')
+                .trim()
+                .toLowerCase()
+                .replace(/\s+/g, '-') + '.pdf';
+        }
+        return 'document.pdf';
+    }
+
     convertBtn.addEventListener('click', async () => {
         if (!markdownInput.value.trim()) {
             alert('Please enter some Markdown text');
@@ -30,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'document.pdf';
+            a.download = getFilenameFromMarkdown(markdownInput.value);
             a.click();
             URL.revokeObjectURL(url);
         } catch (error) {
