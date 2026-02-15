@@ -27,9 +27,20 @@ document.addEventListener('DOMContentLoaded', () => {
             convertBtn.disabled = true;
             convertBtn.textContent = 'Converting...';
 
+            const pdfCss = `
+                @page {
+                    @bottom-center {
+                        content: counter(page);
+                        font-size: 10px;
+                        color: #666;
+                    }
+                }
+            `;
+
             // Create form data
             const formData = new FormData();
             formData.append('markdown', markdownInput.value);
+            formData.append('css', pdfCss);
 
             const response = await fetch(apiUrl, {
                 method: 'POST',
